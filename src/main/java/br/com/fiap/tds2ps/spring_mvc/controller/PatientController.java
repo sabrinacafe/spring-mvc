@@ -11,6 +11,6 @@ public class PatientController {
 
     @PostMapping("/save")
     public ModelAndView addPatient() {
-        return new ModelAndView("add-consultation");
+        return new ModelAndView("consulta_forms");
     }
 }

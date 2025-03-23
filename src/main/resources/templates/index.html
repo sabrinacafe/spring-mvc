@@ -153,27 +153,46 @@ xmlns:th="http://www.thymeleaf.org">
       </ul>
     </div>
 
-    
-<main class="form-signin w-100 m-auto">
-  <form action="#" th:action="@{sign-in}" th:object="${user}" method="post">
-    <img class="mb-4" src="/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">
-    <h1 class="h3 mb-3 fw-normal">Bem-vindos</h1>
 
-    <div class="form-floating">
-      <input type="text" class="form-control" id="cpf" name="cpf" placeholder="123.456.789-10" th:value="*{cpf}">
-      <label for="cpf">CPF do Profissional</label>
-    </div>
-    <div class="form-floating">
-     <!-- <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-      <label for="floatingPassword">Password</label> -->
-      <br/>
-    </div>
+    <main class="form-signin w-100 m-auto">
 
-    <button class="btn btn-primary w-100 py-2" type="submit">Sign in</button>
-    <p class="mt-5 mb-3 text-body-secondary">&copy; 2017–2024</p>
-  </form>
-</main>
-<script src="/assets/dist/js/bootstrap.bundle.min.js"></script>
+      <!-- Mensagem de erro -->
+      <div th:if="${erro}" class="alert alert-danger text-center" role="alert" th:text="${erro}"></div>
+
+      <!-- Saudação ao profissional -->
+      <h2 th:if="${nomeProfissional}" class="text-center mb-4">
+        Bem-vindo(a), <span th:text="${nomeProfissional}"></span>!
+      </h2>
+
+      <form th:action="@{/sign-in}" method="post">
+        <img class="mb-4" src="/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">
+        <h1 class="h3 mb-3 fw-normal text-center">Bem-vindos</h1>
+
+        <div class="form-floating mb-2">
+          <input type="text" class="form-control" id="cpf" name="cpf" placeholder="Digite o CPF do profissional">
+          <label for="cpf">CPF do Profissional</label>
+        </div>
+
+        <!-- Médicos fixos como instrução -->
+        <div class="text-start mb-3">
+          <strong>CPF dos médicos:</strong><br>
+          Maria - <code>111.111.111-11</code><br>
+          João - <code>222.222.222-22</code>
+        </div>
+
+        <button class="btn btn-primary w-100 py-2 mb-2" type="submit">Entrar como Médico</button>
+
+        <!-- Botão para secretária -->
+        <div class="text-center">
+          <a th:href="@{/secretaria/login}" class="btn btn-outline-secondary w-100 py-2">Entrar como Secretária</a>
+        </div>
+
+        <p class="mt-5 mb-3 text-body-secondary text-center">&copy; 2017–2024</p>
+      </form>
+    </main>
+
+
+    <script src="/assets/dist/js/bootstrap.bundle.min.js"></script>
 
     </body>
 </html>

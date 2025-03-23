@@ -17,14 +17,14 @@ public class ConsultationController {
     public ModelAndView start(Model model, @ModelAttribute("patientLazy") PersonDto patient) {
         //Paciente já existe - no nosso vamos usar o cpf 12345678900 como ja existente
         if(patient.getCpf().equals("12345678900")){
-            return new ModelAndView("add-consultation");
+            return new ModelAndView("consulta_forms");
         }
-        return new ModelAndView("add-patient");
+        return new ModelAndView("paciente_forms");
     }
 
     @PostMapping("/save")
     public ModelAndView save() {
-        return new ModelAndView("home");
+        return new ModelAndView("paciente_cpf");
     }
 
 }
