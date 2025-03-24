@@ -1,7 +1,7 @@
 package br.com.fiap.tds2ps.spring_mvc.model;
 
 import jakarta.persistence.*;
-//Teste
+
 @Entity
 @Table(name = "TB_PACIENTE")
 public class Paciente {

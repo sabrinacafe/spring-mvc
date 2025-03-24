@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login Médico - Clínica Vida+</title>
+  <title>Novo Atendimento - Clínica Vida+</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <style>
     body {
-      background-color: #f8f9fa;
+      background-color: #e9f7f6;
     }
 
     .login-container {
@@ -34,6 +34,20 @@
       background-color: #105e54;
       border-color: #105e54;
     }
+
+    .form-floating input {
+      border-radius: 10px;
+    }
+
+    .logged-user {
+      font-size: 0.9rem;
+      color: #6c757d;
+    }
+
+    footer {
+      font-size: 0.9rem;
+      color: #6c757d;
+    }
   </style>
 </head>
 <body>
@@ -43,36 +57,25 @@
     <div class="clinic-logo">Clínica Vida+</div>
   </div>
 
-  <h2 class="mb-3">Bem-vindos</h2>
+  <h2 class="mb-3">Novo Atendimento</h2>
 
-  <form th:action="@{/login-medico}" method="post">
+  <form th:action="@{/atendimento/iniciar}" method="post">
     <div class="form-floating mb-3">
-      <input type="text" class="form-control" id="cpf" name="cpf" placeholder="123.456.789-10" required>
-      <label for="cpf">CPF do Profissional</label>
+      <input type="text" class="form-control" id="cpfPaciente" name="cpf" placeholder="CPF do paciente" required>
+      <label for="cpfPaciente">CPF do Paciente</label>
     </div>
 
-    <button type="submit" class="btn btn-primary w-100 mb-3">Entrar como Médico</button>
+    <p class="logged-user" th:if="${nomeProfissional}">
+      Logado como: <strong th:text="${nomeProfissional}">Profissional</strong>
+    </p>
 
-    <a th:href="@{/secretaria/login}" class="btn btn-outline-secondary w-100">Entrar como Secretária</a>
+    <button type="submit" class="btn btn-primary w-100">Iniciar</button>
   </form>
 
   <footer class="mt-4">
     &copy; Clínica Vida+ 2024
   </footer>
 </div>
-
-<script>
-  document.getElementById('cpf').addEventListener('input', function(e) {
-    let value = e.target.value.replace(/\D/g, '');
-    value = value.slice(0, 11);
-
-    if (value.length >= 3) value = value.slice(0, 3) + '.' + value.slice(3);
-    if (value.length >= 7) value = value.slice(0, 7) + '.' + value.slice(7);
-    if (value.length >= 11) value = value.slice(0, 11) + '-' + value.slice(11);
-
-    e.target.value = value;
-  });
-</script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
