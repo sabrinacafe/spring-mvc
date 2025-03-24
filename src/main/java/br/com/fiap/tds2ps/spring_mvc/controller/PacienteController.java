@@ -7,65 +7,65 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/paciente")
+@RequestMapping("/secretaria/pacientes")
 public class PacienteController {
 
     @Autowired
     private PacienteService pacienteService;
 
-    // Mostrar formulário de novo paciente
+    @GetMapping
+    public String listar(Model model, @RequestParam(required = false) String nome) {
+        List<Paciente> pacientes = (nome != null && !nome.isEmpty())
+                ? pacienteService.buscarPorNome(nome)
+                : pacienteService.listarTodos();
+        model.addAttribute("pacientes", pacientes);
+        return "secretaria-pacientes";
+    }
+
     @GetMapping("/novo")
-    public String mostrarFormulario(Model model) {
+    public String novoPaciente(Model model) {
         model.addAttribute("paciente", new Paciente());
-        return "paciente_forms"; // nome do template HTML
+        return "formulario-paciente";
     }
 
-    // Salvar novo ou editar paciente
-    @PostMapping("/salvar")
-    public String salvarPaciente(@ModelAttribute("paciente") Paciente paciente, Model model) {
-        Optional<Paciente> pacienteExistente = pacienteService.buscarPorCpf(paciente.getCpf());
-
-        if (pacienteExistente.isPresent()) {
-            paciente.setId(pacienteExistente.get().getId()); // garantir update
-            pacienteService.atualizar(paciente);
-            model.addAttribute("mensagem", "Paciente editado com sucesso!");
-        } else {
-            pacienteService.cadastrar(paciente);
-            model.addAttribute("mensagem", "Paciente cadastrado com sucesso!");
-        }
-
-        return "redirect:/paciente/prontuario/" + paciente.getId(); // pode redirecionar pra consulta, por ex
-    }
-
-    // Buscar paciente por CPF e decidir próximo passo
-    @PostMapping("/buscar")
-    public String buscarPorCpf(@RequestParam("cpf") String cpf, Model model) {
-        Optional<Paciente> paciente = pacienteService.buscarPorCpf(cpf);
-
-        if (paciente.isPresent()) {
-            model.addAttribute("paciente", paciente.get());
-            return "opcoes-paciente"; // página com botões "Editar" ou "Iniciar Consulta"
-        } else {
-            return "redirect:/paciente/novo"; // redireciona para formulário de cadastro
-        }
-    }
-
-    // Mostrar formulário para edição
     @GetMapping("/editar/{id}")
     public String editarPaciente(@PathVariable Long id, Model model) {
         Optional<Paciente> paciente = pacienteService.buscarPorId(id);
         paciente.ifPresent(value -> model.addAttribute("paciente", value));
-        return "paciente_forms"; // reaproveita o mesmo formulário
+        return "formulario-paciente";
     }
 
-    // Redireciona para tela de anamnese/prontuário
-    @GetMapping("/prontuario/{id}")
-    public String abrirProntuario(@PathVariable Long id, Model model) {
+    @PostMapping("/salvar")
+    public String salvarPaciente(@ModelAttribute Paciente paciente, Model model) {
+        if (paciente.getId() != null) {
+            pacienteService.atualizar(paciente);
+        } else {
+            pacienteService.cadastrar(paciente);
+        }
+        return "redirect:/secretaria/pacientes";
+    }
+
+    @GetMapping("/excluir/{id}")
+    public String confirmarExclusao(@PathVariable Long id, Model model) {
+        model.addAttribute("idPaciente", id);
+        return "confirmar-exclusao";
+    }
+
+    @PostMapping("/excluir/{id}")
+    public String excluirPaciente(@PathVariable Long id) {
+        pacienteService.excluir(id);
+        return "redirect:/secretaria/pacientes";
+    }
+
+    @GetMapping("/historico/{id}")
+    public String verHistorico(@PathVariable Long id, Model model) {
         Optional<Paciente> paciente = pacienteService.buscarPorId(id);
-        paciente.ifPresent(value -> model.addAttribute("paciente", value));
-        return "patient-save"; // ou outro HTML de prontuário
+        paciente.ifPresent(p -> model.addAttribute("paciente", p));
+        // model.addAttribute("historico", atendimentoService.historicoPorPaciente(id)); // se tiver
+        return "historico-paciente";
     }
 }

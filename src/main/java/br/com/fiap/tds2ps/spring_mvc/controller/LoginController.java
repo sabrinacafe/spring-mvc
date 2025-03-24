@@ -4,10 +4,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class HomeController {
+public class LoginController {
 
-    @GetMapping("/")
-    public String index() {
-        return "index"; // Página inicial com botão para Médico e Secretária
+    @GetMapping("/secretaria/login")
+    public String loginSecretaria() {
+        return "secretaria-login";
     }
 }
