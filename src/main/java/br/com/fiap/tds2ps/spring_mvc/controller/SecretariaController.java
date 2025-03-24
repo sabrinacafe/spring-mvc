@@ -9,36 +9,36 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Optional;
 
-@Controller
-@RequestMapping("/secretaria")
-public class SecretariaController {
+    @Controller
+    @RequestMapping("/secretaria")
+    public class SecretariaController {
 
-    private final SecretariaRepository secretariaRepository;
+        private final SecretariaRepository secretariaRepository;
 
-    public SecretariaController(SecretariaRepository secretariaRepository) {
-        this.secretariaRepository = secretariaRepository;
-    }
+        public SecretariaController(SecretariaRepository secretariaRepository) {
+            this.secretariaRepository = secretariaRepository;
+        }
 
-    @GetMapping("/login")
-    public String loginPage() {
-        return "secretaria-login";
-    }
+        @GetMapping("/login")
+        public String loginPage() {
+            return "secretaria-login";
+        }
 
-    @PostMapping("/login")
-    public String autenticarSecretaria(@RequestParam String usuario, @RequestParam String senha,
-                                       RedirectAttributes redirectAttributes, HttpSession session) {
-        Optional<Secretaria> secretaria = secretariaRepository.findByUsuarioAndSenha(usuario, senha);
-        if (secretaria.isPresent()) {
-            session.setAttribute("secretaria", secretaria.get());
-            return "redirect:/secretaria/dashboard";
-        } else {
-            redirectAttributes.addFlashAttribute("erro", "Usuário ou senha inválidos!");
-            return "redirect:/secretaria/login";
+        @PostMapping("/login")
+        public String autenticarSecretaria(@RequestParam String usuario, @RequestParam String senha,
+                                           RedirectAttributes redirectAttributes, HttpSession session) {
+            Optional<Secretaria> secretaria = secretariaRepository.findByUsuarioAndSenha(usuario, senha);
+            if (secretaria.isPresent()) {
+                session.setAttribute("secretaria", secretaria.get());
+                return "redirect:/secretaria/pacientes";
+            } else {
+                redirectAttributes.addFlashAttribute("erro", "Usuário ou senha inválidos!");
+                return "redirect:/secretaria/login";
+            }
+        }
+
+        @GetMapping("/dashboard")
+        public String dashboard() {
+            return "redirect:/secretaria/pacientes";
         }
     }
-
-    @GetMapping("/dashboard")
-    public String dashboard() {
-        return "secretaria-dashboard";
-    }
-}
