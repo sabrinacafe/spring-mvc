@@ -17,7 +17,7 @@ public class ProntuarioController {
     private final PacienteService pacienteService;
     private final ProntuarioService prontuarioService;
 
-    // ✅ Injeção via construtor
+    // Injeção via construtor
     public ProntuarioController(PacienteService pacienteService, ProntuarioService prontuarioService) {
         this.pacienteService = pacienteService;
         this.prontuarioService = prontuarioService;
@@ -41,9 +41,9 @@ public class ProntuarioController {
         return "consulta-inicio";
     }
 
-    @PostMapping("/salvar")
+    @PostMapping("/atendimento/salvar")
     public String salvarConsulta(@ModelAttribute Prontuario prontuario) {
         prontuarioService.salvar(prontuario);
-        return "redirect:/consulta/inicio";
+        return "redirect:/";
     }
 }
