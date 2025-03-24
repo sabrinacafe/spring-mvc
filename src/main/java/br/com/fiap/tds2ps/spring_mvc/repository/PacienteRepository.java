@@ -8,6 +8,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PacienteRepository extends JpaRepository<Paciente, Long> {
-    List<Paciente> findByNomeContainingIgnoreCase(String nome);
+    List<Paciente> findByNomeCompletoContainingIgnoreCase(String nomeCompleto);;
     Optional<Paciente> findByCpf(String cpf);
 }

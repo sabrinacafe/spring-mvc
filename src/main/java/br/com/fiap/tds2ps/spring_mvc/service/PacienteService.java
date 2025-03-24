@@ -21,8 +21,8 @@ public class PacienteService {
         return pacienteRepository.findAll();
     }
 
-    public List<Paciente> buscarPorNome(String nome) {
-        return pacienteRepository.findByNomeContainingIgnoreCase(nome);
+    public List<Paciente> buscarPorNome(String nomeCompleto) {
+        return pacienteRepository.findByNomeCompletoContainingIgnoreCase(nomeCompleto);
     }
 
     public Optional<Paciente> buscarPorId(Long id) {
