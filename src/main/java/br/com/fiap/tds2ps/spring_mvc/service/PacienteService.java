@@ -26,6 +26,10 @@ public class PacienteService {
         return pacienteRepository.findById(id);
     }
 
+    public Optional<Paciente> buscarPorCpf(String cpf) {
+        return pacienteRepository.findByCpf(cpf);
+    }
+
     public void cadastrar(Paciente paciente) {
         pacienteRepository.save(paciente);
     }
