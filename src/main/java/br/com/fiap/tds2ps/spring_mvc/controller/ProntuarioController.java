@@ -4,7 +4,6 @@ import br.com.fiap.tds2ps.spring_mvc.model.Paciente;
 import br.com.fiap.tds2ps.spring_mvc.model.Prontuario;
 import br.com.fiap.tds2ps.spring_mvc.service.PacienteService;
 import br.com.fiap.tds2ps.spring_mvc.service.ProntuarioService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,11 +14,14 @@ import java.util.Optional;
 @RequestMapping("/consulta")
 public class ProntuarioController {
 
-    @Autowired
-    private PacienteService pacienteService;
+    private final PacienteService pacienteService;
+    private final ProntuarioService prontuarioService;
 
-    @Autowired
-    private ProntuarioService prontuarioService;
+    // ✅ Injeção via construtor
+    public ProntuarioController(PacienteService pacienteService, ProntuarioService prontuarioService) {
+        this.pacienteService = pacienteService;
+        this.prontuarioService = prontuarioService;
+    }
 
     @GetMapping("/inicio")
     public String novaConsultaForm() {

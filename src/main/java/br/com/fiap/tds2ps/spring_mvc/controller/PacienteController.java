@@ -2,7 +2,6 @@ package br.com.fiap.tds2ps.spring_mvc.controller;
 
 import br.com.fiap.tds2ps.spring_mvc.model.Paciente;
 import br.com.fiap.tds2ps.spring_mvc.service.PacienteService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +13,12 @@ import java.util.Optional;
 @RequestMapping("/secretaria/pacientes")
 public class PacienteController {
 
-    @Autowired
-    private PacienteService pacienteService;
+    private final PacienteService pacienteService;
+
+    // Injeção via construtor
+    public PacienteController(PacienteService pacienteService) {
+        this.pacienteService = pacienteService;
+    }
 
     @GetMapping
     public String listar(Model model, @RequestParam(required = false) String nome) {
@@ -65,7 +68,6 @@ public class PacienteController {
     public String verHistorico(@PathVariable Long id, Model model) {
         Optional<Paciente> paciente = pacienteService.buscarPorId(id);
         paciente.ifPresent(p -> model.addAttribute("paciente", p));
-        // model.addAttribute("historico", atendimentoService.historicoPorPaciente(id)); // se tiver
         return "historico-paciente";
     }
 }
