@@ -24,6 +24,6 @@ public class AtendimentoController {
     // Exibe o formulário do prontuário (anamnese + prescrição)
     @GetMapping("/prontuario")
     public String exibirFormularioDeAtendimento() {
-        return "atendimento-prontuario"; // página com anamnese e prescrição
+        return "novo-atendimento"; // página com anamnese e prescrição
     }
 }

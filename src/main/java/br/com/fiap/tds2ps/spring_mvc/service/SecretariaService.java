@@ -1,7 +1,6 @@
 package br.com.fiap.tds2ps.spring_mvc.service;
 
 import br.com.fiap.tds2ps.spring_mvc.model.Secretaria;
-import br.com.fiap.tds2ps.spring_mvc.repository.SecretariaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -9,13 +8,13 @@ import java.util.Optional;
 @Service
 public class SecretariaService {
 
-    private final SecretariaRepository secretariaRepository;
-
-    public SecretariaService(SecretariaRepository secretariaRepository) {
-        this.secretariaRepository = secretariaRepository;
-    }
-
     public Optional<Secretaria> autenticar(String usuario, String senha) {
-        return secretariaRepository.findByUsuarioAndSenha(usuario, senha);
+        if ("admin123".equals(usuario) && "admin123".equals(senha)) {
+            Secretaria secretaria = new Secretaria();
+            secretaria.setId(1L); // ou null, se preferir
+            secretaria.setUsuario(usuario);
+            return Optional.of(secretaria);
+        }
+        return Optional.empty();
     }
 }

@@ -31,7 +31,7 @@
   <div class="text-center mb-4">
     <div class="clinic-logo">Clínica Vida+</div>
     <h3>Histórico de Atendimentos</h3>
-    <p th:text="'Paciente: ' + ${paciente.nome} + ' | CPF: ' + ${paciente.cpf}"></p>
+    <p th:text="'Paciente: ' + ${paciente.nomeCompleto} + ' | CPF: ' + ${paciente.cpf}"></p>
   </div>
 
   <div th:if="${historico.empty}" class="alert alert-info text-center">
@@ -51,7 +51,7 @@
   </div>
 
   <div class="text-center">
-    <a th:href="@{/secretaria/pacientes}" class="btn btn-outline-secondary">Voltar para Lista</a>
+    <a th:href="@{/secretaria/pacientes-lista}" class="btn btn-outline-secondary">Voltar para Lista</a>
   </div>
 </div>
 

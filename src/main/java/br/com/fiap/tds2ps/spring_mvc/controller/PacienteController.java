@@ -35,14 +35,14 @@ public class PacienteController {
     @GetMapping("/novo")
     public String novoPaciente(Model model) {
         model.addAttribute("paciente", new Paciente());
-        return "secretaria/paciente-form";
+        return "paciente-form";
     }
 
     @GetMapping("/editar/{id}")
     public String editarPaciente(@PathVariable Long id, Model model) {
         Optional<Paciente> paciente = pacienteService.buscarPorId(id);
         paciente.ifPresent(value -> model.addAttribute("paciente", value));
-        return "secretaria/paciente-form";
+        return "paciente-form";
     }
 
     @PostMapping("/salvar")
@@ -52,7 +52,7 @@ public class PacienteController {
         } else {
             pacienteService.cadastrar(paciente);
         }
-        return "redirect:/secretaria/pacientes";
+        return "redirect:/secretaria/pacientes-lista";
     }
 
     @GetMapping("/excluir/{id}")
@@ -66,7 +66,7 @@ public class PacienteController {
     @PostMapping("/excluir/{id}")
     public String excluirPaciente(@PathVariable Long id) {
         pacienteService.excluir(id);
-        return "redirect:/secretaria/pacientes";
+        return "redirect:/secretaria/pacientes-lista";
     }
 
     @GetMapping("/historico/{id}")
@@ -76,6 +76,18 @@ public class PacienteController {
             model.addAttribute("paciente", p);
             model.addAttribute("historico", prontuarioService.listarPorPaciente(p));
         });
-        return "secretaria/historico-paciente";
+        return "historico-paciente";
+    }
+
+    @PostMapping("/historico")
+    public String verHistoricoPaciente(@RequestParam String cpf, Model model) {
+        Optional<Paciente> paciente = pacienteService.buscarPorCpf(cpf);
+        if (paciente.isPresent()) {
+            model.addAttribute("paciente", paciente.get());
+            model.addAttribute("historico", prontuarioService.listarPorPaciente(paciente.get()));
+            return "historico-paciente";
+        }
+        model.addAttribute("erro", "Paciente não encontrado.");
+        return "consulta-inicio";
     }
 }
