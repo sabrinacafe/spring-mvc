@@ -8,10 +8,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/consulta")
+@RequestMapping("/atendimento")
 public class ProntuarioController {
 
     private final PacienteService pacienteService;
@@ -22,39 +23,44 @@ public class ProntuarioController {
         this.prontuarioService = prontuarioService;
     }
 
-    @GetMapping("/inicio")
-    public String novaConsultaForm() {
-        return "consulta-inicio";
-    }
+    @GetMapping
+    public String atendimento(@RequestParam String cpf, Model model) {
+        System.out.println("Chegou no atendimento com CPF: " + cpf);
 
-    @PostMapping("/buscar")
-    public String buscarPaciente(@RequestParam String cpf, Model model) {
         Optional<Paciente> paciente = pacienteService.buscarPorCpf(cpf);
         if (paciente.isPresent()) {
             model.addAttribute("paciente", paciente.get());
-            model.addAttribute("historico", prontuarioService.listarPorPaciente(paciente.get()));
-            model.addAttribute("prontuario", new Prontuario());
-            return "consulta-form";
-        }
-        model.addAttribute("erro", "Paciente não encontrado");
-        return "consulta-inicio";
-    }
 
-    @PostMapping("/atendimento/salvar")
-    public String salvarConsulta(@ModelAttribute Prontuario prontuario) {
-        prontuarioService.salvar(prontuario);
-        return "redirect:/";
-    }
+            List<Prontuario> historico = prontuarioService.listarPorPaciente(paciente.get());
+            StringBuilder sb = new StringBuilder();
+            for (Prontuario p : historico) {
+                sb.append("Data: ").append(p.getData()).append("\n")
+                        .append("Anamnese: ").append(p.getAnamnese()).append("\n")
+                        .append("Prescrição: ").append(p.getPrescricao()).append("\n\n");
+            }
 
-    @PostMapping("/historico")
-    public String verHistoricoPaciente(@RequestParam String cpf, Model model) {
-        Optional<Paciente> paciente = pacienteService.buscarPorCpf(cpf);
-        if (paciente.isPresent()) {
-            model.addAttribute("paciente", paciente.get());
-            model.addAttribute("historico", prontuarioService.listarPorPaciente(paciente.get()));
-            return "historico-paciente";
+            model.addAttribute("historico", sb.toString());
+            return "atendimento";
         }
+
+        System.out.println("Paciente não encontrado");
         model.addAttribute("erro", "Paciente não encontrado.");
-        return "consulta-inicio";
+        return "novo-atendimento";
+    }
+
+    @PostMapping("/salvar")
+    public String salvarConsulta(@RequestParam String cpf,
+                                 @RequestParam String anamnese,
+                                 @RequestParam String prescricao) {
+        Optional<Paciente> paciente = pacienteService.buscarPorCpf(cpf);
+        if (paciente.isPresent()) {
+            Prontuario prontuario = new Prontuario();
+            prontuario.setPaciente(paciente.get());
+            prontuario.setAnamnese(anamnese);
+            prontuario.setPrescricao(prescricao);
+            prontuarioService.salvar(prontuario);
+        }
+
+        return "redirect:/";
     }
 }
