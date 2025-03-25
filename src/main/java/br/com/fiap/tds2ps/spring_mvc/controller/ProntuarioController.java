@@ -32,14 +32,7 @@ public class ProntuarioController {
             model.addAttribute("paciente", paciente.get());
 
             List<Prontuario> historico = prontuarioService.listarPorPaciente(paciente.get());
-            StringBuilder sb = new StringBuilder();
-            for (Prontuario p : historico) {
-                sb.append("Data: ").append(p.getData()).append("\n")
-                        .append("Anamnese: ").append(p.getAnamnese()).append("\n")
-                        .append("Prescrição: ").append(p.getPrescricao()).append("\n\n");
-            }
-
-            model.addAttribute("historico", sb.toString());
+            model.addAttribute("historico", historico);
             return "atendimento";
         }
 
@@ -62,5 +55,17 @@ public class ProntuarioController {
         }
 
         return "redirect:/";
+    }
+
+    @PostMapping("/historico")
+    public String verHistoricoPaciente(@RequestParam String cpf, Model model) {
+        Optional<Paciente> paciente = pacienteService.buscarPorCpf(cpf);
+        if (paciente.isPresent()) {
+            model.addAttribute("paciente", paciente.get());
+            model.addAttribute("historico", prontuarioService.listarPorPaciente(paciente.get()));
+            return "historico-paciente";
+        }
+        model.addAttribute("erro", "Paciente não encontrado.");
+        return "consulta-inicio";
     }
 }
