@@ -65,8 +65,8 @@
       <label for="cpfPaciente">CPF do Paciente</label>
     </div>
 
-    <p class="logged-user" th:if="${nomeProfissional}">
-      Logado como: <strong th:text="${nomeProfissional}">Profissional</strong>
+    <p class="logged-user" th:if="${session.nomeProfissional}">
+      Logado como: <strong th:text="${session.nomeProfissional}">Profissional</strong>
     </p>
 
     <button type="submit" class="btn btn-primary w-100">Iniciar</button>

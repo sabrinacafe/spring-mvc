@@ -34,7 +34,7 @@ public class MedicoController {
                 .map(nome -> {
                     session.setAttribute("nomeProfissional", nome);
                     session.setAttribute("cpfProfissional", cpf);
-                    return "redirect:/consulta/inicio";
+                    return "redirect:/atendimento/iniciar";
                 })
                 .orElseGet(() -> {
                     redirectAttributes.addFlashAttribute("erro", "CPF de profissional não cadastrado");

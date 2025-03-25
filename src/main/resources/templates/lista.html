@@ -57,7 +57,7 @@
         <td class="d-flex gap-1">
           <a th:href="@{/secretaria/pacientes/editar/{id}(id=${paciente.id})}" class="btn btn-sm btn-warning">Editar</a>
           <a th:href="@{/secretaria/pacientes/excluir/{id}(id=${paciente.id})}" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja excluir este paciente?');">Excluir</a>
-          <a th:href="@{/secretaria/pacientes/{id}/historico(id=${paciente.id})}" class="btn btn-sm btn-info text-white">Ver Histórico</a>
+          <a th:href="@{/secretaria/pacientes/historico/{id}(id=${paciente.id})}" class="btn btn-sm btn-info text-white">Ver Histórico</a>
         </td>
       </tr>
       <tr th:if="${#lists.isEmpty(pacientes)}">
